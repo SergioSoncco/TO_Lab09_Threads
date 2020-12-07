@@ -18,11 +18,10 @@ void modifThreadExecuting(single_llist sl);
 
 int main(){
 
-  /*std::thread adderThread(adderThreadExecuting);
-  std::thread deleteThread(deleteThreadExecuting);
-  std::thread readThread(readThreadExecuting);
-  std::thread modifThread(modifThreadExecuting);
-
+  /*std::thread adderThread(adderThreadExecuting,sl);
+  std::thread deleteThread(deleteThreadExecuting,sl);
+  std::thread readThread(readThreadExecuting,sl);
+  std::thread modifThread(modifThreadExecuting,sl);
   adderThread.join();
   deleteThread.join();
   readThread.join();
@@ -51,7 +50,7 @@ void adderThreadExecuting(single_llist sl){
     int num = distribucion(generador);
     while (lock.test_and_set(std::memory_order_acquire))
         ;
-    std::cout << "Output from thread " << "adder "<<num << '\n';
+    std::cout << "Insertando: "<< num << '\n';
     sl.insert_begin(num);
     lock.clear(std::memory_order_release);
 }
@@ -63,11 +62,17 @@ void deleteThreadExecuting(single_llist sl){
     int num = distribucion(generador);
     while (lock.test_and_set(std::memory_order_acquire))
         ;
-    std::cout << "Output from thread " << "deleter "<<num << '\n';
-    int pos = sl.search(num);
-    sl.delete_pos(pos);
+    int pos = sl.search_val(num);
+    if(pos!=-1){
+     std::cout<<"Eliminando: "<<num<<"\n";
+     sl.delete_pos(pos);
+    }
+    else{
+     std::cout<<"No se elmino: "<<num<<"\n";
+    }
     lock.clear(std::memory_order_release);
 }
+
 void readThreadExecuting(single_llist sl){
     std::random_device device;
     mt19937 generador(device());
@@ -75,10 +80,10 @@ void readThreadExecuting(single_llist sl){
     int num = distribucion(generador);
     while (lock.test_and_set(std::memory_order_acquire))
         ;
-    std::cout << "Output from thread " << "reader "<<num << '\n';
-    sl.search(num);
+    sl.search(num)? std::cout<<"Buscado: "<<num<< '\n' : std::cout<<"No encontrado: "<<num<< '\n';
     lock.clear(std::memory_order_release);
 }
+
 void modifThreadExecuting(single_llist sl){
     std::random_device device;
     mt19937 generador(device());
@@ -86,7 +91,6 @@ void modifThreadExecuting(single_llist sl){
     int num = distribucion(generador);
     while (lock.test_and_set(std::memory_order_acquire))
         ;
-    std::cout << "Output from thread " << "modifier " << num << '\n';
-    sl.update(num+100,sl.search(num));
+    sl.update(num+10,sl.search(num))? std::cout << "Modificando: "<<num<<" a "<<num+10<< '\n' : std::cout << "No encontrado"<< '\n';
     lock.clear(std::memory_order_release);
 }

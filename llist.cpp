@@ -23,6 +23,7 @@ class single_llist
         void insert_pos(int,int);
         void insert_last(int);
         void delete_pos(int);
+	int  search_val(int);
         bool search(int);
         bool update(int,int);
         void display();
@@ -200,7 +201,6 @@ bool single_llist::update(int val,int pos)
     int  i;
     if (start == NULL)
     {
-        cout<<"List is empty"<<endl;
         return false;
     }
     struct node *s, *ptr;
@@ -215,7 +215,6 @@ bool single_llist::update(int val,int pos)
         {
             if (s == NULL)
             {
-                cout<<"There are less than "<<pos<<" elements";
                 return false;
             }
             s = s->next;
@@ -235,7 +234,6 @@ bool single_llist::search(int val)
     bool flag = false;
     if (start == NULL)
     {
-        cout<<"List is empty"<<endl;
         return false;
     }
 
@@ -247,14 +245,40 @@ bool single_llist::search(int val)
         if (s->info == val)
         {
             flag = true;
-            cout<<"Element "<<val<<" is found at position "<<pos<<endl;
         }
         s = s->next;
     }
     if (!flag)
-        cout<<"Element "<<val<<" not found in the list"<<endl;
-
+        
     return flag;
+}
+
+/*
+ * Searching an element and return position
+ */
+int single_llist::search_val(int val)
+{
+    int  pos = 0;
+    int flag = -1;
+    if (start == NULL)
+    {
+	return -1;
+    }
+
+    struct node *s;
+    s = start;
+    while (s != NULL)
+    {
+        pos++;
+        if (s->info == val)
+        {
+            flag = pos;
+	    return flag;
+        }
+        s = s->next;
+    }
+        
+    return -1;
 }
 
 /*
