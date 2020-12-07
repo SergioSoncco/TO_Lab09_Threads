@@ -7,7 +7,6 @@
 #include <thread>
 #include "llist.cpp"
 
-int min = 0, max = 1000;
 single_llist sl;
 std::atomic_flag lock = ATOMIC_FLAG_INIT;
 
@@ -48,7 +47,7 @@ int main(){
 void adderThreadExecuting(single_llist sl){
     std::random_device device;
     mt19937 generador(device());
-    uniform_int_distribution<> distribucion(0, 1000);
+    uniform_int_distribution<> distribucion(0, 10);
     int num = distribucion(generador);
     while (lock.test_and_set(std::memory_order_acquire))
         ;
@@ -60,7 +59,7 @@ void adderThreadExecuting(single_llist sl){
 void deleteThreadExecuting(single_llist sl){
     std::random_device device;
     mt19937 generador(device());
-    uniform_int_distribution<> distribucion(0, 1000);
+    uniform_int_distribution<> distribucion(0, 10);
     int num = distribucion(generador);
     while (lock.test_and_set(std::memory_order_acquire))
         ;
@@ -72,7 +71,7 @@ void deleteThreadExecuting(single_llist sl){
 void readThreadExecuting(single_llist sl){
     std::random_device device;
     mt19937 generador(device());
-    uniform_int_distribution<> distribucion(0, 1000);
+    uniform_int_distribution<> distribucion(0, 10);
     int num = distribucion(generador);
     while (lock.test_and_set(std::memory_order_acquire))
         ;
@@ -83,7 +82,7 @@ void readThreadExecuting(single_llist sl){
 void modifThreadExecuting(single_llist sl){
     std::random_device device;
     mt19937 generador(device());
-    uniform_int_distribution<> distribucion(0, 1000);
+    uniform_int_distribution<> distribucion(0, 10);
     int num = distribucion(generador);
     while (lock.test_and_set(std::memory_order_acquire))
         ;
